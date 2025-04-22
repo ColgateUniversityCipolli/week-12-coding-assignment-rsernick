@@ -1,4 +1,5 @@
 library(tidyverse)
+library(patchwork)
 
 ##########################################################################################
 ### 1. a. and b.
@@ -68,7 +69,7 @@ simulation = function(a, b, test){
       err = err + 1
     }else if (t[i] > t.high & test == 'right.sided'){
       err = err + 1
-    }else if (t[i] < t.2.side[1] | t[i] > t.2.side[2] & test == 'two.sided'){
+    }else if ((t[i] < t.2.side[1] | t[i] > t.2.side[2]) & test == 'two.sided'){
       err = err + 1
     }
   }
@@ -108,12 +109,18 @@ ggplot(data = graph.dat) +
   geom_hline(yintercept = 0) +
   theme_bw()
 
-ggplot(data = graph.dat) +
+g1 = ggplot(data = graph.dat) +
+  geom_line(aes(x = x, y = pdf1))+ 
+  geom_vline(xintercept = simulations$mu[1], color = "blue") +
+  theme_bw()
+
+g2 = ggplot(data = graph.dat) +
   geom_line(aes(x = x, y = pdf2))+ 
   geom_vline(xintercept = simulations$mu[2], color = "blue") +
   theme_bw()
 
-ggplot(data = graph.dat) +
+g3 = ggplot(data = graph.dat) +
   geom_line(aes(x = x, y = pdf3))+ 
   geom_vline(xintercept = simulations$mu[3], color = "blue") +
   theme_bw()
+g1+g2+g3
